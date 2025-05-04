@@ -2,6 +2,7 @@ package authentication.user
 
 
 import authentication.auth.RegisterRequest
+import authentication.auth.RegistrationRequestDTO
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -26,6 +27,33 @@ data class UsersService (
 
         return usersRepository.save(myNewUserEntity)
     }
+    fun registerUsers(request: RegistrationRequestDTO): UserEntity {
+        if (usersRepository.existsByUsername(request.username)) {
+            throw IllegalArgumentException("Username already exists")
+        }
+
+        val password = request.password
+
+        if (password.length < 6) {
+            throw IllegalArgumentException("Password must be at least 6 characters long")
+        }
+        if (!password.any { it.isUpperCase() }) {
+            throw IllegalArgumentException("Password must contain at least one capital letter")
+        }
+        if (!password.any { it.isDigit() }) {
+            throw IllegalArgumentException("Password must contain at least one number")
+        }
+
+        val user = UserEntity(
+            username = request.username,
+            password = passwordEncoder.encode(password),
+            name = request.name,
+            balance = request.balance ?: BigDecimal.ZERO
+        )
+
+        return usersRepository.save(user)
+    }
+
 
     // This function searches for a user by username and returns their ID
     fun findByUsername(username: String): Long {
@@ -40,6 +68,7 @@ data class UsersService (
         return usersRepository.findByUsername(username)
             ?: throw UsernameNotFoundException("User with username $username not found.")
     }
+
 
 
 //    fun findByUsername (username: String): Long

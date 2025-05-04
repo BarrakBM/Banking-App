@@ -1,6 +1,8 @@
 package authentication.auth
 
 import authentication.jwt.JwtService
+import authentication.user.UserEntity
+import authentication.user.UsersRepository
 import authentication.user.UsersService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.math.BigDecimal
 import java.security.Principal
 
 @RestController
@@ -38,20 +41,33 @@ class AuthenticationController(
     }
 
     @PostMapping("/register")
-
-    fun addUser(@RequestBody request: RegisterRequest): ResponseEntity<AuthenticationResponse> {
-
-        val user = usersService.createUser(request)
-        // Calls a service method to create a new user entity in the database.
-        // This might include hashing the password, saving user data, etc.
-
-        val token = jwtService.generateToken(user.username)
-        // After creating the user, generates a JWT token using the username.
-        // This token is used for future authentication.
-
-        return ResponseEntity.ok(AuthenticationResponse(token))
-        // Returns HTTP 200 OK response with a JSON body containing the generated token.
+    fun addUser(@RequestBody request: RegistrationRequestDTO): String{
+        usersService.registerUsers(request)
+return "OK"
     }
+
+
+
+//    @PostMapping("/register")
+//
+//    fun addUser(@RequestBody request: RegisterRequest): ResponseEntity<AuthenticationResponse> {
+//
+//        val user = usersService.createUser(request)
+//        // Calls a service method to create a new user entity in the database.
+//        // This might include hashing the password, saving user data, etc.
+//
+//        val token = jwtService.generateToken(user.username)
+//        // After creating the user, generates a JWT token using the username.
+//        // This token is used for future authentication.
+//
+//        return ResponseEntity.ok(AuthenticationResponse(token))
+//        // Returns HTTP 200 OK response with a JSON body containing the generated token.
+//    }
+
+
+
+
+
 
 
 //    @PostMapping("/register")
@@ -90,6 +106,12 @@ data class RegisterRequest(
 
 data class RegisterFailureResponse(
     val error: AddUserError
+)
+data class RegistrationRequestDTO(
+    val username: String,
+    val password: String,
+    val name: String,
+    val balance: BigDecimal
 )
 
 enum class AddUserError {

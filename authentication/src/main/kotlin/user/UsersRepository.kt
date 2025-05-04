@@ -8,6 +8,7 @@ import java.math.BigDecimal
 
 @Repository
 interface UsersRepository : JpaRepository<UserEntity, Long> {
+    fun existsByUsername(username: String): Boolean
     fun findByUsername(username: String): UserEntity?
 }
 
@@ -38,3 +39,4 @@ data class UserEntity(
 {
     constructor() : this(null, "", "", null, BigDecimal.ZERO, true)
 }
+
