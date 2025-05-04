@@ -1,0 +1,31 @@
+package banking.repository
+
+import banking.repository.GroupsEntity
+import jakarta.persistence.*
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+import java.math.BigDecimal
+import java.time.LocalDate
+
+@Repository
+interface GroupTransactionsRepository: JpaRepository<GroupTransactionsEntity,Long>{
+    fun findById(Id: Long?):GroupTransactionsEntity
+    fun findByGroupId(groupId: GroupsEntity): GroupTransactionsEntity
+}
+
+@Entity
+@Table(name = "group_transaction")
+data class GroupTransactionsEntity (
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val Id: Long? = null,
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    val groupId: GroupsEntity,
+    val amount: BigDecimal,
+    val description: String,
+    val createdAt: LocalDate
+
+){
+    constructor(): this(0,GroupsEntity(), BigDecimal.ZERO,"",LocalDate.now())
+}
