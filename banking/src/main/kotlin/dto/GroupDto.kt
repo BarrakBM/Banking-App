@@ -1,4 +1,4 @@
-package com.example.dto
+package com.bankingapp.banking.dto
 
 class GroupDto {
 }

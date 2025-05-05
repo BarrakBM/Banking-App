@@ -1,4 +1,4 @@
-package banking.client
+package com.bankingapp.banking.client
 
 import jakarta.inject.Named
 import org.springframework.core.ParameterizedTypeReference

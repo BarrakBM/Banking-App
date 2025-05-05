@@ -1,4 +1,10 @@
-package banking.dto
+package com.bankingapp.banking.dto
 
-class AccountDto {
-}
+import java.math.BigDecimal
+
+
+data class accountInformationDTO(
+
+    val name: String,
+    val balance: BigDecimal
+    )

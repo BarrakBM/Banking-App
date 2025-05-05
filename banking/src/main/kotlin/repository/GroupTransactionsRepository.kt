@@ -1,6 +1,6 @@
-package banking.repository
+package com.bankingapp.banking.repository
 
-import banking.repository.GroupsEntity
+import  com.bankingapp.banking.repository.GroupsEntity
 import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 @Repository
 interface GroupTransactionsRepository: JpaRepository<GroupTransactionsEntity,Long>{
-    fun findById(Id: Long?):GroupTransactionsEntity
+    fun findById(id: Long?):GroupTransactionsEntity
     fun findByGroupId(groupId: GroupsEntity): GroupTransactionsEntity
 }
 
@@ -18,7 +18,7 @@ interface GroupTransactionsRepository: JpaRepository<GroupTransactionsEntity,Lon
 data class GroupTransactionsEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val Id: Long? = null,
+    val id: Long? = null,
     @ManyToOne
     @JoinColumn(name = "group_id")
     val groupId: GroupsEntity,
