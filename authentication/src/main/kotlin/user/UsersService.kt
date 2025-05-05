@@ -47,8 +47,6 @@ data class UsersService (
         val user = UserEntity(
             username = request.username,
             password = passwordEncoder.encode(password),
-            name = request.name,
-            balance = request.balance ?: BigDecimal.ZERO
         )
 
         return usersRepository.save(user)
