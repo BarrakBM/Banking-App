@@ -27,16 +27,9 @@ data class UserEntity(
     @Column(nullable = false)
     val password: String,
 
-    val name: String? = null,
-
-    val balance: BigDecimal = BigDecimal.ZERO,
-
-    @Column(name = "is_active")
-    val isActive: Boolean = true
-
 
 )
 {
-    constructor() : this(null, "", "", null, BigDecimal.ZERO, true)
+    constructor() : this(null, "", "")
 }
 

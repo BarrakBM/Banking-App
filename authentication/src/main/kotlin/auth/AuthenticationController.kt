@@ -43,7 +43,7 @@ class AuthenticationController(
     @PostMapping("/register")
     fun addUser(@RequestBody request: RegistrationRequestDTO): String{
         usersService.registerUsers(request)
-return "OK"
+        return "OK"
     }
 
 
@@ -110,8 +110,6 @@ data class RegisterFailureResponse(
 data class RegistrationRequestDTO(
     val username: String,
     val password: String,
-    val name: String,
-    val balance: BigDecimal
 )
 
 enum class AddUserError {
