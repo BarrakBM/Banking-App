@@ -1,4 +1,4 @@
-package banking.repository
+package com.bankingapp.banking.repository
 
 
 import jakarta.persistence.*

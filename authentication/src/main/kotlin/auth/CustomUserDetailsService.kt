@@ -1,8 +1,8 @@
-package authentication.auth
+package com.bankingapp.auth
 
 
-import authentication.user.UserEntity
-import authentication.user.UsersRepository
+import com.bankingapp.user.UserEntity
+import com.bankingapp.user.UsersRepository
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService

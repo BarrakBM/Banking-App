@@ -1,4 +1,4 @@
-package com.example.repository
+package com.bankingapp.banking.repository
 
 import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 import java.math.BigDecimal
 
 @Repository
-interface AccountRepository:JpaRepository<AccountRepository,Long>{
+interface AccountRepository:JpaRepository<AccountEntity,Long>{
     fun findByUserId(userId: Long): AccountEntity
 }
 
@@ -15,7 +15,7 @@ interface AccountRepository:JpaRepository<AccountRepository,Long>{
 data class AccountEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val Id: Long? = null,
+    val id: Long? = null,
     val userId: Long,
     val name: String,
     val balance: BigDecimal,

@@ -1,7 +1,6 @@
-package banking.controller
+package com.bankingapp.banking.controller
 
-import banking.repository.GroupsEntity
-import banking.repository.GroupsRepository
+import com.bankingapp.banking.repository.GroupsRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController

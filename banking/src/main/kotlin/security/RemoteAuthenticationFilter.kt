@@ -1,7 +1,7 @@
-package banking.security
+package com.bankingapp.banking.security
 
 
-import banking.client.AuthenticationClient
+import com.bankingapp.banking.client.AuthenticationClient
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.*
 import org.springframework.stereotype.Component

@@ -1,10 +1,9 @@
-package authentication.auth
+package com.bankingapp.auth
 
-import authentication.jwt.JwtService
-import authentication.user.UserEntity
-import authentication.user.UsersRepository
-import authentication.user.UsersService
-import org.springframework.http.ResponseEntity
+
+//import authentication.user.UsersService
+import com.bankingapp.jwt.JwtService
+import com.bankingapp.user.UsersService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.math.BigDecimal
 import java.security.Principal
 
 @RestController
