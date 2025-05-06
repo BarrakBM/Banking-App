@@ -13,6 +13,8 @@ import java.time.LocalDate
 interface GroupMembersRepository:JpaRepository<GroupMembersEntity,Long>{
     fun findByUserId(userId: Long):GroupMembersEntity
     fun findByGroupId(groupId: Long):GroupMembersRepository
+    // Add this method to your GroupMembersRepository interface
+    fun findByUserIdAndGroupId(userId: Long, groupId: Long): GroupMembersEntity?
 }
 
 @Entity
