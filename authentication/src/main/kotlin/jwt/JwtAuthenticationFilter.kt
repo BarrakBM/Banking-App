@@ -1,4 +1,4 @@
-package authentication.jwt
+package com.bankingapp.jwt
 
 
 

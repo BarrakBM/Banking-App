@@ -1,6 +1,7 @@
-package authentication.auth
+package com.bankingapp.auth
 
-import authentication.jwt.JwtAuthenticationFilter
+
+import com.bankingapp.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager

@@ -1,13 +1,13 @@
-package authentication.user
+package com.bankingapp.user
 
 
-import authentication.auth.RegisterRequest
-import authentication.auth.RegistrationRequestDTO
+//import authentication.auth.RegisterRequest
+//import authentication.auth.RegistrationRequestDTO
+import com.bankingapp.auth.RegisterRequest
+import com.bankingapp.auth.RegistrationRequestDTO
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.math.BigDecimal
-
 
 
 @Service
