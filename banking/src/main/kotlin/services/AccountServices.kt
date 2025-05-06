@@ -11,24 +11,27 @@ class AccountServices (
     val accountRepository: AccountRepository
 ){
 
-    fun addinformation(userId: Long,accountInfo: accountInformationDTO){
-
-
-        val userInfo = AccountEntity(
+    fun addOrUpdateInformation(userId: Long,accountInfo: accountInformationDTO){
+        var account = accountRepository.findByUserId(userId) ?: AccountEntity(
             userId = userId,
             name = accountInfo.name,
             balance = accountInfo.balance,
             isActive = true
         )
-        accountRepository.save(userInfo)
-//        val saveInfo = accountRepository.save(userInfo)
 
-//        val newInfo = AccountEntity(
-//            userId = userId,
-//            name = accountInfo.name,
-//            balance = accountInfo.balance,
-//            isActive = true
-//        )
-//        accountRepository.save(newInfo)
+        account.name = accountInfo.name
+        account.balance = accountInfo.balance
+
+        accountRepository.save(account)
+
+    }
+
+    fun deactiveAccount(userId: Long){
+
+        println("the user iiiiiidddddddd is $userId")
+            var account = accountRepository.findByUserId(userId)!!
+            account.isActive = false
+        accountRepository.save(account)
+
     }
 }
