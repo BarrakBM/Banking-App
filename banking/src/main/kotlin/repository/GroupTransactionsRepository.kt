@@ -24,8 +24,10 @@ data class GroupTransactionsEntity (
     val groupId: GroupsEntity,
     val amount: BigDecimal,
     val description: String,
+    @ManyToOne
+    val accountId: AccountEntity,
     val createdAt: LocalDate
 
 ){
-    constructor(): this(0,GroupsEntity(), BigDecimal.ZERO,"",LocalDate.now())
+    constructor(): this(0,GroupsEntity(), BigDecimal.ZERO,"", AccountEntity(),LocalDate.now())
 }

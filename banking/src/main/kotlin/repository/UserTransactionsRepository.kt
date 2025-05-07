@@ -18,10 +18,12 @@ class UserTransactionsEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val Id:Long? = null,
-    val  sourceId:Long,
-    val destinationId: Long,
+    @ManyToOne
+    val  sourceId:AccountEntity,
+    @ManyToOne
+    val destinationId: AccountEntity,
     val amount: BigDecimal,
     val createdAt: LocalDate
 ) {
-    constructor(): this(0,0,0, BigDecimal.ZERO,LocalDate.now())
+    constructor(): this(0,AccountEntity(), AccountEntity(), BigDecimal.ZERO,LocalDate.now())
 }

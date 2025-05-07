@@ -53,7 +53,7 @@ class GroupController (
         @RequestBody removeMemberRequest: RemoveGroupMemberRequestDTO
     ): String {
         val adminId = request.getAttribute("userId") as Long
-        val removedMember = groupService.removeGroupMmeber(
+        val removedMember = groupService.removeGroupMember(
             adminId,
             removeMemberRequest.groupId,
             removeMemberRequest.userIdToRemove
