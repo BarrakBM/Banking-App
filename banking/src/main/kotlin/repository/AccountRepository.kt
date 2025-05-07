@@ -7,7 +7,7 @@ import java.math.BigDecimal
 
 @Repository
 interface AccountRepository:JpaRepository<AccountEntity,Long>{
-    fun findByUserId(userId: Long): AccountEntity
+    fun findByUserId(userId: Long): AccountEntity?
 }
 
 @Entity
@@ -17,9 +17,9 @@ data class AccountEntity (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     val userId: Long,
-    val name: String,
-    val balance: BigDecimal,
-    val isActive: Boolean
+    var name: String,
+    var balance: BigDecimal,
+    var isActive: Boolean
 
 ){
 constructor(): this(0,0,"", BigDecimal.ZERO,true)
