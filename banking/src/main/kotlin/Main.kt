@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class banking
+class Banking
 fun main(args: Array<String>) {
 
-    runApplication<banking>(*args)
+    runApplication<Banking>(*args)
 }
