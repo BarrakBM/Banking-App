@@ -9,8 +9,9 @@ import java.math.BigDecimal
 
 @Repository
 interface GroupsRepository: JpaRepository<GroupsEntity,Long>{
-    fun findByGroupId(groupId: Long?):GroupsEntity
+    fun findByGroupId(groupId: Long?):GroupsEntity?
     fun findByAdminId(adminId: Long):GroupsEntity
+
 }
 
 @Entity
@@ -19,11 +20,12 @@ data class GroupsEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val groupId: Long ? = null,
+
     val name: String,
-    val balance:BigDecimal,
-    val isActive: Boolean,
+    var balance:BigDecimal,
+    var isActive: Boolean,
     val adminId: Long,
 
-) {constructor(): this (0 , "", BigDecimal.ZERO,true,0)
+    ) {constructor(): this (0 , "", BigDecimal.ZERO,true,0)
 
 }
