@@ -1,6 +1,7 @@
 package com.bankingapp.banking.controller
 
 
+import com.bankingapp.banking.dto.TransferInfoDTO
 import com.bankingapp.banking.dto.accountInformationDTO
 import com.bankingapp.banking.dto.fundGroupDTO
 import com.bankingapp.banking.services.AccountServices
@@ -21,10 +22,22 @@ class AccountController (
     fun addInformation(
         request: HttpServletRequest,
         @RequestBody accountInfo: accountInformationDTO
-    ){
+    ): ResponseEntity<*> {
         val userId = request.getAttribute("userId") as Long
-         accountServices.addOrUpdateInformation(userId, accountInfo)
+//         accountServices.addOrUpdateInformation(userId, accountInfo)
 
+        return ResponseEntity.ok(accountServices.addOrUpdateInformation(userId,accountInfo))
+    }
+
+    @GetMapping("/account/v1/get-Information")
+    fun viewInformation(
+        request: HttpServletRequest,
+
+    ): ResponseEntity<*> {
+        val userId = request.getAttribute("userId") as Long
+//         accountServices.addOrUpdateInformation(userId, accountInfo)
+
+        return ResponseEntity.ok(accountServices.viewInformation(userId))
     }
 
 
@@ -33,8 +46,7 @@ class AccountController (
     fun deactiveAccount(request: HttpServletRequest): ResponseEntity<*> {
         return try {
             val userId = request.getAttribute("userId") as Long
-            accountServices.deactiveAccount(userId)
-             ResponseEntity.ok("")
+            ResponseEntity.ok(accountServices.deActiveAccount(userId))
         }catch (e: Exception)
         {
             println(e)
@@ -43,19 +55,45 @@ class AccountController (
 
     }
 
-//    @PostMapping("/account/v1/fundGroup")
-//    fun userFundGroup(request: HttpServletRequest,
-//                      fundgrp: fundGroupDTO){
+    @PostMapping("/account/v1/fundGroup")
+    fun userFundGroup(request: HttpServletRequest,
+                     @RequestBody fundgrp: fundGroupDTO): ResponseEntity<*>{
+       return try {
+        val userId = request.getAttribute("userId") as Long
 //        val userId = request.getAttribute("userId") as Long
-//        accountServices.userFundGroup(userId,fundgrp)
-//    }
 
-//    @GetMapping("/account/v1/userTransactionHistory")
-//    fun userTransactionHistory(request: HttpServletRequest): ResponseEntity<*>{
-//        val userId = request.getAttribute("userId") as Long
-////        ResponseEntity.ok(accountServices.u)
-//    }
+            return ResponseEntity.ok(accountServices.userFundGroup(userId,fundgrp))
+       }
+       catch (e: Exception)
+       {
+        ResponseEntity.badRequest().body(mapOf("Sorry = ((( " to e.message))
+       }
 
+
+    }
+
+    @GetMapping("/account/v1/userTransactionHistory")
+    fun userTransactionHistory(request: HttpServletRequest): ResponseEntity<*> {
+      return try {
+          val userId = request.getAttribute("userId") as Long
+          ResponseEntity.ok(accountServices.userTransactionHistory(userId))
+      }
+      catch (e: Exception)
+      {
+          ResponseEntity.badRequest().body(mapOf("Sorry = ((( " to e.message))
+      }
+    }
+
+
+    @PostMapping("/account/v1/transfer")
+    fun transferMoney(request: HttpServletRequest, @RequestBody transferInfo: TransferInfoDTO): ResponseEntity<*> {
+        val userId = request.getAttribute("userId") as Long
+
+        return ResponseEntity.ok(accountServices.transferMoney(
+            userId,
+            transferInfo.destinationId,
+            transferInfo.amount))
+    }
 
 
 }

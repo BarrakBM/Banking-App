@@ -10,6 +10,7 @@ import javax.print.attribute.standard.Destination
 @Repository
 interface UserTransactionsRepository: JpaRepository<UserTransactionsEntity,Long>{
     fun findById(Id: Long?): List<UserTransactionsEntity>?
+    fun findBySourceId(sourceId: AccountEntity): List<UserTransactionsEntity>
 }
 
 @Entity
@@ -18,10 +19,14 @@ class UserTransactionsEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val Id:Long? = null,
-    val  sourceId:Long,
-    val destinationId: Long,
+    @ManyToOne
+    @JoinColumn(name = "source_id")
+    val  sourceId:AccountEntity,
+    @ManyToOne
+    @JoinColumn(name = "destination_id")
+    val destinationId: AccountEntity,
     val amount: BigDecimal,
     val createdAt: LocalDate
 ) {
-    constructor(): this(0,0,0, BigDecimal.ZERO,LocalDate.now())
+    constructor(): this(0,AccountEntity(), AccountEntity(), BigDecimal.ZERO,LocalDate.now())
 }

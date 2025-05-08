@@ -1,5 +1,6 @@
 package com.bankingapp.banking.dto
 
+import com.bankingapp.banking.repository.UserTransactionsEntity
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -10,20 +11,65 @@ data class accountInformationDTO(
     val balance: BigDecimal
     )
 
-data class fundGroupDTO(
-    val groupId: Long,
-    val amount: BigDecimal,
-    val description: String?
+data class InformationDTO(
+
+    val name: String,
+    val balance: BigDecimal,
+    val isActive: Boolean
 )
 
 
-data class userTransHistory(
-    val fromUser: String,
-    val toUser: String,
+data class TransferInfoDTO(
+    val destinationId: Long,
+    val amount: BigDecimal
+)
+
+data class TransferResponseDTO(
+    val userId: Long,
+    val newBalance: BigDecimal
+)
+
+
+data class userfundResponse(
+    val userAmount: BigDecimal,
+    val groupAmount: BigDecimal
+)
+
+data class fundGroupDTO(
+    val groupId: Long,
+    val amount: BigDecimal,
+    val description: String
+)
+
+
+data class DeAtivateDTO(
+    val userId: Long,
+    val isActive: Boolean
+)
+
+
+data class userTransactionDTO(
+    val from: String,
+    val to: String,
     val amount: BigDecimal,
     val time: LocalDate
 )
 
-data class userTransactionHistoryRespone(
-    val historyList: List<userTransHistory>
+data class allTransactionHistoryRespone(
+    val transactionHistory: List<allTransactionDTO>
 )
+
+
+
+data class allTransactionDTO(
+    val from: String,
+    val to: String,
+    val amount: BigDecimal,
+    val type: String,
+    val time: LocalDate
+)
+
+
+//data class userTransDTO(user: userTransactionDTO)(
+//    val transaction: UserTransactionsEntity()
+//)

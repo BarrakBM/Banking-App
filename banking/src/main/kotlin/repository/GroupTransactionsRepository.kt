@@ -11,10 +11,11 @@ import java.time.LocalDate
 interface GroupTransactionsRepository: JpaRepository<GroupTransactionsEntity,Long>{
     fun findById(id: Long?):GroupTransactionsEntity
     fun findByGroupId(groupId: GroupsEntity): GroupTransactionsEntity
+    fun findByAccountId(accountId: AccountEntity): List<GroupTransactionsEntity>
 }
 
 @Entity
-@Table(name = "group_transaction")
+@Table(name = "group_transactions")
 data class GroupTransactionsEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +25,11 @@ data class GroupTransactionsEntity (
     val groupId: GroupsEntity,
     val amount: BigDecimal,
     val description: String,
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    val accountId: AccountEntity,
     val createdAt: LocalDate
 
 ){
-    constructor(): this(0,GroupsEntity(), BigDecimal.ZERO,"",LocalDate.now())
+    constructor(): this(0,GroupsEntity(), BigDecimal.ZERO,"", AccountEntity(),LocalDate.now())
 }
