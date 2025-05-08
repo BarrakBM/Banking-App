@@ -1,19 +1,16 @@
 package com.bankingapp.banking.controller
 
 
+import com.bankingapp.banking.dto.TransferInfoDTO
 import com.bankingapp.banking.dto.accountInformationDTO
 import com.bankingapp.banking.dto.fundGroupDTO
-import com.bankingapp.banking.dto.userTransactionHistoryRespone
 import com.bankingapp.banking.services.AccountServices
 import jakarta.servlet.http.HttpServletRequest
-import org.apache.coyote.BadRequestException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.client.HttpClientErrorException.BadRequest
-import java.math.BigDecimal
 
 @RestController
 
@@ -25,10 +22,22 @@ class AccountController (
     fun addInformation(
         request: HttpServletRequest,
         @RequestBody accountInfo: accountInformationDTO
-    ){
+    ): ResponseEntity<*> {
         val userId = request.getAttribute("userId") as Long
-         accountServices.addOrUpdateInformation(userId, accountInfo)
+//         accountServices.addOrUpdateInformation(userId, accountInfo)
 
+        return ResponseEntity.ok(accountServices.addOrUpdateInformation(userId,accountInfo))
+    }
+
+    @GetMapping("/account/v1/get-Information")
+    fun viewInformation(
+        request: HttpServletRequest,
+
+    ): ResponseEntity<*> {
+        val userId = request.getAttribute("userId") as Long
+//         accountServices.addOrUpdateInformation(userId, accountInfo)
+
+        return ResponseEntity.ok(accountServices.viewInformation(userId))
     }
 
 
@@ -37,8 +46,7 @@ class AccountController (
     fun deactiveAccount(request: HttpServletRequest): ResponseEntity<*> {
         return try {
             val userId = request.getAttribute("userId") as Long
-            accountServices.deactiveAccount(userId)
-             ResponseEntity.ok("")
+            ResponseEntity.ok(accountServices.deActiveAccount(userId))
         }catch (e: Exception)
         {
             println(e)
@@ -49,28 +57,43 @@ class AccountController (
 
     @PostMapping("/account/v1/fundGroup")
     fun userFundGroup(request: HttpServletRequest,
-                     @RequestBody fundgrp: fundGroupDTO): BigDecimal{
-//       return try {
+                     @RequestBody fundgrp: fundGroupDTO): ResponseEntity<*>{
+       return try {
         val userId = request.getAttribute("userId") as Long
 //        val userId = request.getAttribute("userId") as Long
-        return accountServices.userFundGroup(userId,fundgrp)
-//            return ResponseEntity.ok(accountServices.userFundGroup(userId,fundgrp))
-//       }
-//       catch (e: Exception)
-//       {
-//        ResponseEntity.badRequest().body(mapOf("Sorry = ((( " to e.message))
-//       }
+
+            return ResponseEntity.ok(accountServices.userFundGroup(userId,fundgrp))
+       }
+       catch (e: Exception)
+       {
+        ResponseEntity.badRequest().body(mapOf("Sorry = ((( " to e.message))
+       }
 
 
     }
 
     @GetMapping("/account/v1/userTransactionHistory")
-    fun userTransactionHistory(request: HttpServletRequest): userTransactionHistoryRespone? {
-        val userId = request.getAttribute("userId") as Long
-        return accountServices.userTransactionHistory(userId)
-//        ResponseEntity.ok(accountServices.u)
+    fun userTransactionHistory(request: HttpServletRequest): ResponseEntity<*> {
+      return try {
+          val userId = request.getAttribute("userId") as Long
+          ResponseEntity.ok(accountServices.userTransactionHistory(userId))
+      }
+      catch (e: Exception)
+      {
+          ResponseEntity.badRequest().body(mapOf("Sorry = ((( " to e.message))
+      }
     }
 
+
+    @PostMapping("/account/v1/transfer")
+    fun transferMoney(request: HttpServletRequest, @RequestBody transferInfo: TransferInfoDTO): ResponseEntity<*> {
+        val userId = request.getAttribute("userId") as Long
+
+        return ResponseEntity.ok(accountServices.transferMoney(
+            userId,
+            transferInfo.destinationId,
+            transferInfo.amount))
+    }
 
 
 }

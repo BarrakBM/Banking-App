@@ -15,6 +15,7 @@ interface GroupMembersRepository:JpaRepository<GroupMembersEntity,Long>{
     fun findByGroupId(groupId: Long):GroupMembersRepository
     // Add this method to your GroupMembersRepository interface
     fun findByUserIdAndGroupId(userId: Long, groupId: Long): GroupMembersEntity?
+    fun existsByGroupIdAndUserId(groupId: Long, userId: Long): Boolean
 }
 
 @Entity

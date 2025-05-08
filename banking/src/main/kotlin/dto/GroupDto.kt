@@ -34,7 +34,43 @@ data class RemoveGroupMemberRequestDTO(
     val userIdToRemove: Long
 )
 
+data class userRemoved(
+    val groupId: Long,
+    val RemovedUserId: Long
+
+)
+
+
+//--------------------------------
+
+
 data class FundGroupRequestDTO(
     val groupId: Long,
 
+    )
+data class deActivateGroupRequestDTO(
+    val groupId: Long,
+
+    )
+
+
+//for group details info
+data class GroupDetailsDTO(
+    val groupId: Long,
+    val groupName: String,
+    val balance: BigDecimal,
+    val adminId: Long,
+    val members: List<MemberDTO>
 )
+
+data class MemberDTO(
+    val userId: Long,
+    val isAdmin: Boolean
+)
+
+
+data class GroupIdRequestDTO(
+    val groupId: Long
+)
+
+

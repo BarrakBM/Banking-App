@@ -27,7 +27,7 @@ data class UsersService (
 
         return usersRepository.save(myNewUserEntity)
     }
-    fun registerUsers(request: RegistrationRequestDTO): UserEntity {
+    fun registerUsers(request: RegistrationRequestDTO): registorDTO {
         if (usersRepository.existsByUsername(request.username)) {
             throw IllegalArgumentException("Username already exists")
         }
@@ -48,8 +48,12 @@ data class UsersService (
             username = request.username,
             password = passwordEncoder.encode(password),
         )
-
-        return usersRepository.save(user)
+        usersRepository.save(user)
+        val uservalues = registorDTO(
+            username = request.username,
+            userRegisterd = user.id!!
+                )
+        return uservalues
     }
 
 

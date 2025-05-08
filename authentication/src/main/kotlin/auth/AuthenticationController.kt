@@ -4,6 +4,7 @@ package com.bankingapp.auth
 //import authentication.user.UsersService
 import com.bankingapp.jwt.JwtService
 import com.bankingapp.user.UsersService
+import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -39,40 +40,13 @@ class AuthenticationController(
     }
 
     @PostMapping("/register")
-    fun addUser(@RequestBody request: RegistrationRequestDTO): String{
-        usersService.registerUsers(request)
-        return "OK"
+    fun addUser(@RequestBody request: RegistrationRequestDTO): ResponseEntity<*>{
+//        usersService.registerUsers(request)
+        return ResponseEntity.ok(usersService.registerUsers(request))
     }
 
 
 
-//    @PostMapping("/register")
-//
-//    fun addUser(@RequestBody request: RegisterRequest): ResponseEntity<AuthenticationResponse> {
-//
-//        val user = usersService.createUser(request)
-//        // Calls a service method to create a new user entity in the database.
-//        // This might include hashing the password, saving user data, etc.
-//
-//        val token = jwtService.generateToken(user.username)
-//        // After creating the user, generates a JWT token using the username.
-//        // This token is used for future authentication.
-//
-//        return ResponseEntity.ok(AuthenticationResponse(token))
-//        // Returns HTTP 200 OK response with a JSON body containing the generated token.
-//    }
-
-
-
-
-
-
-
-//    @PostMapping("/register")
-//    fun addUser(@RequestBody request: RegisterRequest) {
-//        usersService.createUser(request)
-//        ResponseEntity.ok()
-//    }
 
     @PostMapping("/check-token")
     fun checkToken(
