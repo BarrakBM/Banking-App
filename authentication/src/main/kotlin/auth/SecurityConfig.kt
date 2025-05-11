@@ -29,7 +29,7 @@ class SecurityConfig(
         http.csrf { it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/login").permitAll()
-                it.requestMatchers("/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/register").permitAll()
                     .anyRequest().authenticated()
             }
             .sessionManagement {

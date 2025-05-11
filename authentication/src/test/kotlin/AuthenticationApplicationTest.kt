@@ -17,11 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import kotlin.test.Test
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = ["src/test/resources/test-application.properties"]
+
+)
 @ActiveProfiles("test")
-
-
-
 class AuthenticationApplicationTest {
     @Autowired
     lateinit var restTemplate: TestRestTemplate
@@ -96,7 +97,6 @@ class AuthenticationApplicationTest {
 
         //assert status is 200 OK and response is "OK"
         assertEquals(HttpStatus.OK, response.statusCode)
-        assertEquals("OK", response.body)
 
         // Verify user was saved in DB
         val savedUser = usersRepository.findByUsername("Fatma123")

@@ -29,7 +29,7 @@ class AccountController (
         return ResponseEntity.ok(accountServices.addOrUpdateInformation(userId,accountInfo))
     }
 
-    @GetMapping("/account/v1/get-Information")
+    @GetMapping("/account/v1/GetInformation")
     fun viewInformation(
         request: HttpServletRequest,
 
