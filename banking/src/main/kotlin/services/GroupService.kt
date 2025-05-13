@@ -49,7 +49,7 @@ class GroupService(
     }
 
     // adding member to the group
-    fun addGroupMember(adminId: Long, groupId: Long, userIdToAdd: Long): GroupMembersEntity{
+    fun addGroupMember(adminId: Long, groupId: Long, userIdToAdd: Long): AddGroupMemberResposeDTO {
         // check if the group exists
         val group = groupsRepository.findByGroupId(groupId)
             ?: throw IllegalArgumentException("Group cannot be found")
@@ -66,7 +66,7 @@ class GroupService(
         }
 
         // check if user account is active
-        val currentUser = accountRepository.findByUserId(userIdToAdd)
+        val currentUser = accountRepository.findByUserId(userIdToAdd)!!
         if (currentUser != null) {
             if (!currentUser.isActive ){
                 throw IllegalArgumentException("User account is not active")
@@ -86,14 +86,21 @@ class GroupService(
             isAdmin = false,
             joinedAt = LocalDate.now()
         )
-        return groupMembersRepository.save(newMember)
 
+        val response = AddGroupMemberResposeDTO(
+            username = currentUser.name,
+            groupname = group.name,
+            joinedAt = newMember.joinedAt
+        )
+         groupMembersRepository.save(newMember)
+
+        return response
 
 
     }
 
     // remove group member
-    fun removeGroupMember(adminId: Long, groupId: Long, userToRemove: Long): userRemoved {
+    fun removeGroupMember(adminId: Long, groupId: Long, userToRemove: Long): userRemovedResponseDTO {
 
         // check if the group exists
         val group = groupsRepository.findByGroupId(groupId)
@@ -110,6 +117,9 @@ class GroupService(
         val existingMember = groupMembersRepository.findByUserIdAndGroupId(userToRemove, groupId)
             ?: throw IllegalArgumentException("User is not a member of this group")
 
+        val account = accountRepository.findByUserId(userToRemove)
+            ?: throw IllegalArgumentException("User Account Not Fund")
+
         // check if user is admin (can't remove admin)
         if (existingMember.isAdmin) {
             throw IllegalArgumentException("Cannot remove the group admin")
@@ -122,7 +132,11 @@ class GroupService(
             groupId = groupId,
             RemovedUserId = userToRemove
         )
-        return removedUser
+        val removedUser1 = userRemovedResponseDTO(
+            groupName = group.name,
+            username = account.name
+        )
+        return removedUser1
 
     }
 
@@ -166,7 +180,7 @@ class GroupService(
 
         // check if current  user is group admin
         if (group.adminId != adminId) {
-            throw IllegalArgumentException("Only admin can add members to the group")
+            throw IllegalArgumentException("Only admin can pay for the group")
         }
 
         if(!group.isActive){

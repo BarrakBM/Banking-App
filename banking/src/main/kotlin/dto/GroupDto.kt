@@ -20,6 +20,12 @@ data class AddGroupMemberRequestDTO(
     val userIdToAdd: Long
 )
 
+data class AddGroupMemberResposeDTO(
+    val groupname: String,
+    val username: String,
+    val joinedAt: LocalDate
+)
+
 data class GroupMemberResponseDTO(
     val id: Long?,
     val userId: Long,
@@ -40,7 +46,10 @@ data class userRemoved(
 
 )
 
-
+data class userRemovedResponseDTO(
+    val groupName: String,
+    val username: String
+)
 //--------------------------------
 
 
@@ -63,11 +72,23 @@ data class GroupDetailsDTO(
     val members: List<MemberDTO>
 )
 
+data class GroupDetailsResponseDTO(
+
+    val groupName: String,
+    val balance: BigDecimal,
+    val adminName: String,
+    val members: List<MemberInfoDTO>
+)
+
 data class MemberDTO(
     val userId: Long,
     val isAdmin: Boolean
 )
 
+data class MemberInfoDTO(
+    val username: String,
+    val isAdmin: Boolean
+)
 
 data class GroupIdRequestDTO(
     val groupId: Long
