@@ -25,7 +25,7 @@ class AccountController (
     ): ResponseEntity<*> {
         val userId = request.getAttribute("userId") as Long
 //         accountServices.addOrUpdateInformation(userId, accountInfo)
-println("Fatma was here...")
+//println("Fatma was here...")
         return ResponseEntity.ok(accountServices.addOrUpdateInformation(userId,accountInfo))
     }
 
