@@ -158,10 +158,10 @@ class AccountServices (
     }
 
 
-    fun transferMoney(sourceAccountId: Long, destinationAccountId: Long, amount: BigDecimal): TransferResponseDTO {
+    fun transferMoney(userId: Long, destinationAccountId: Long, amount: BigDecimal): TransferResponseResponseDTO {
 
-        val sourceAccount = accountRepository.findById(sourceAccountId)
-            .orElseThrow { IllegalArgumentException("Source account not found") }
+
+        val sourceAccount = accountRepository.findByUserId(userId)!! // ?:  { IllegalArgumentException("Source account not found") }
 
         val destinationAccount = accountRepository.findById(destinationAccountId)
             .orElseThrow { IllegalArgumentException("Destination account not found") }
@@ -200,8 +200,8 @@ class AccountServices (
                 createdAt = LocalDate.now()
             )
         )
-        val transaction = TransferResponseDTO(
-            userId = sourceAccountId,
+        val transaction = TransferResponseResponseDTO(
+             name = sourceAccount.name!!,
             newBalance = sourceAccount.balance
         )
         return transaction

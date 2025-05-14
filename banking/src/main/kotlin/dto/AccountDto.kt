@@ -29,6 +29,11 @@ data class TransferResponseDTO(
     val newBalance: BigDecimal
 )
 
+data class TransferResponseResponseDTO(
+    val name: String,
+    val newBalance: BigDecimal
+)
+
 
 data class userfundResponse(
     val userAmount: BigDecimal,
