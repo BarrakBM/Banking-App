@@ -14,6 +14,16 @@ data class GroupResponseDTO(
     val balance: BigDecimal
 )
 
+data class FundRequestResponseDTO(
+    val groupName: String,
+    val amount: BigDecimal,
+    val accountName: String
+)
+
+data class FundRequestResponseListDTO(
+    val fundRequests: List<FundRequestResponseDTO>
+)
+
 
 data class AddGroupMemberRequestDTO(
     val groupId: Long,

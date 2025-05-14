@@ -12,7 +12,7 @@ class AuthenticationClient {
 
     fun checkToken(token: String): CheckTokenResponse {
         val restTemplate = RestTemplate()
-        val url = "http://localhost:8081/api/auth/check-token"
+        val url = "http://localhost:8086/api/auth/check-token"
         val response = restTemplate.exchange<CheckTokenResponse>(
             url = url,
             method = HttpMethod.POST,

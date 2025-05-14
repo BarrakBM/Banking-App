@@ -68,7 +68,7 @@ class NewBankingTest {
     }
 
     private fun createTestUser() {
-        val authCreateUrl = "http://localhost:8081/api/auth/register"
+        val authCreateUrl = "http://localhost:8086/api/auth/register"
         val newUserRequest = mapOf(
             "username" to testUsername,
             "password" to testPassword
@@ -87,7 +87,7 @@ class NewBankingTest {
     }
 
     private fun loginTestUser(): String {
-        val authUrl = "http://localhost:8081/api/auth/login"
+        val authUrl = "http://localhost:8086/api/auth/login"
         val loginRequest = mapOf(
             "username" to testUsername,
             "password" to testPassword
@@ -184,6 +184,67 @@ class NewBankingTest {
             deactivateRequest,
             String::class.java
         )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
