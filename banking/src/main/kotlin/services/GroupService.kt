@@ -3,6 +3,7 @@ package com.bankingapp.banking.services
 import com.bankingapp.banking.dto.*
 import com.bankingapp.banking.repository.*
 import jakarta.inject.Named
+import java.math.RoundingMode
 import java.time.LocalDate
 
 @Named
@@ -10,7 +11,8 @@ class GroupService(
     private val groupsRepository: GroupsRepository,
     private val groupMembersRepository: GroupMembersRepository,
     private val groupTransactionsRepository: GroupTransactionsRepository,
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val fundRequestRepository: FundRequestRepository
 ) {
 
     // creating a group
@@ -49,7 +51,7 @@ class GroupService(
     }
 
     // adding member to the group
-    fun addGroupMember(adminId: Long, groupId: Long, userIdToAdd: Long): GroupMembersEntity{
+    fun addGroupMember(adminId: Long, groupId: Long, userIdToAdd: Long): AddGroupMemberResposeDTO {
         // check if the group exists
         val group = groupsRepository.findByGroupId(groupId)
             ?: throw IllegalArgumentException("Group cannot be found")
@@ -67,11 +69,12 @@ class GroupService(
 
         // check if user account is active
         val currentUser = accountRepository.findByUserId(userIdToAdd)
-        if (currentUser != null) {
+            ?: throw IllegalArgumentException("No account for this user")
+
             if (!currentUser.isActive ){
                 throw IllegalArgumentException("User account is not active")
             }
-        }
+
 
         // check if user is already a member of the group
         val existingMember = groupMembersRepository.findByUserIdAndGroupId(userIdToAdd, groupId)
@@ -86,14 +89,21 @@ class GroupService(
             isAdmin = false,
             joinedAt = LocalDate.now()
         )
-        return groupMembersRepository.save(newMember)
 
+        val response = AddGroupMemberResposeDTO(
+            username = currentUser.name,
+            groupname = group.name,
+            joinedAt = newMember.joinedAt
+        )
+         groupMembersRepository.save(newMember)
+
+        return response
 
 
     }
 
     // remove group member
-    fun removeGroupMember(adminId: Long, groupId: Long, userToRemove: Long): userRemoved {
+    fun removeGroupMember(adminId: Long, groupId: Long, userToRemove: Long): userRemovedResponseDTO {
 
         // check if the group exists
         val group = groupsRepository.findByGroupId(groupId)
@@ -110,6 +120,9 @@ class GroupService(
         val existingMember = groupMembersRepository.findByUserIdAndGroupId(userToRemove, groupId)
             ?: throw IllegalArgumentException("User is not a member of this group")
 
+        val account = accountRepository.findByUserId(userToRemove)
+            ?: throw IllegalArgumentException("User Account Not Fund")
+
         // check if user is admin (can't remove admin)
         if (existingMember.isAdmin) {
             throw IllegalArgumentException("Cannot remove the group admin")
@@ -122,7 +135,11 @@ class GroupService(
             groupId = groupId,
             RemovedUserId = userToRemove
         )
-        return removedUser
+        val removedUser1 = userRemovedResponseDTO(
+            groupName = group.name,
+            username = account.name
+        )
+        return removedUser1
 
     }
 
@@ -166,7 +183,7 @@ class GroupService(
 
         // check if current  user is group admin
         if (group.adminId != adminId) {
-            throw IllegalArgumentException("Only admin can add members to the group")
+            throw IllegalArgumentException("Only admin can pay for the group")
         }
 
         if(!group.isActive){
@@ -231,6 +248,43 @@ class GroupService(
             adminId = group.adminId,
             members = memberDTOs
         )
+    }
+
+    // check balance --
+    fun adminFundRequest(userId: Long , adminRequest: adminFundRequestDTO){
+
+        val group = groupsRepository.findByGroupId(adminRequest.groupId)
+            ?: throw IllegalArgumentException("Group cannot be found")
+
+
+        // check if current  user is group admin
+        if (group.adminId != userId) {
+            throw IllegalArgumentException("Only admin can ask for Request")
+        }
+
+        if(!group.isActive){
+            throw IllegalArgumentException("Group is not active")
+        }
+
+        val members = groupMembersRepository.findByGroupId(adminRequest.groupId)
+
+        val userAmount = adminRequest.amount.setScale(3, RoundingMode.UP).div(members.size.toBigDecimal())
+
+        // insert user amount to DB
+        for (m in members)
+        {
+            val account = accountRepository.findByUserId(m.userId)
+                ?: throw IllegalArgumentException("No account avliable")
+
+            val fundEntity = FundRequestEntity(
+                account = account,
+                amount = userAmount,
+                group = group
+
+            )
+            val fundRequest = fundRequestRepository.save(fundEntity)
+        }
+
     }
 
 }

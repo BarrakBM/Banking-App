@@ -73,4 +73,8 @@ data class GroupIdRequestDTO(
     val groupId: Long
 )
 
+data class adminFundRequestDTO(
+    val groupId: Long,
+    val amount: BigDecimal
+)
 
