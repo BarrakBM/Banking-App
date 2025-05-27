@@ -8,7 +8,8 @@ import java.time.LocalDate
 data class accountInformationDTO(
 
     val name: String,
-    val balance: BigDecimal
+    val balance: BigDecimal,
+    val gender: Int?
     )
 
 data class InformationDTO(
