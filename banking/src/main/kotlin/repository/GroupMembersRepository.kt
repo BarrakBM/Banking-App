@@ -12,7 +12,7 @@ import java.time.LocalDate
 @Repository
 interface GroupMembersRepository:JpaRepository<GroupMembersEntity,Long>{
     fun findByUserId(userId: Long):GroupMembersEntity
-    fun findByGroupId(groupId: Long):GroupMembersRepository
+    fun findByGroupId(groupId: Long): List<GroupMembersEntity>
     // Add this method to your GroupMembersRepository interface
     fun findByUserIdAndGroupId(userId: Long, groupId: Long): GroupMembersEntity?
     fun existsByGroupIdAndUserId(groupId: Long, userId: Long): Boolean

@@ -23,17 +23,22 @@ class AccountServices (
                 userId = userId,
                 name = accountInfo.name,
                 balance = accountInfo.balance,
-                isActive = true
+                isActive = true,
+                gender = accountInfo.gender!!
+
             )
 
 
         account.name = accountInfo.name // account name
         account.balance = accountInfo.balance // account new balance
+        account.gender = accountInfo.gender
         accountRepository.save(account)
 
         val newInfo = accountInformationDTO(
             name = account.name,
-            balance = account.balance
+            balance = account.balance ,
+            gender = account.gender
+
         )
 
         return newInfo
@@ -48,7 +53,8 @@ class AccountServices (
         val newInfo = InformationDTO(
             name = account.name,
             balance = account.balance,
-            isActive = account.isActive
+            isActive = account.isActive,
+            gender = account.gender!!
         )
 
         return newInfo

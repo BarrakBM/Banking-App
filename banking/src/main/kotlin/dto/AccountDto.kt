@@ -8,14 +8,16 @@ import java.time.LocalDate
 data class accountInformationDTO(
 
     val name: String,
-    val balance: BigDecimal
+    val balance: BigDecimal,
+    val gender: Int?
     )
 
 data class InformationDTO(
 
     val name: String,
     val balance: BigDecimal,
-    val isActive: Boolean
+    val isActive: Boolean,
+    val gender: Int
 )
 
 

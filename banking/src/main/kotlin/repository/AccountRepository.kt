@@ -22,9 +22,10 @@ data class AccountEntity (
     val userId: Long,
     var name: String,
     var balance: BigDecimal,
-    var isActive: Boolean
+    var isActive: Boolean,
+    var gender: Int?
 
 ){
-constructor(): this(0,0,"", BigDecimal.ZERO,true)
+constructor(): this(0,0,"", BigDecimal.ZERO,true , 0)
 
 }
