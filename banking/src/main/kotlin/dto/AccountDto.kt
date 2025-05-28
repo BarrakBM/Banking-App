@@ -16,7 +16,8 @@ data class InformationDTO(
 
     val name: String,
     val balance: BigDecimal,
-    val isActive: Boolean
+    val isActive: Boolean,
+    val gender: Int
 )
 
 

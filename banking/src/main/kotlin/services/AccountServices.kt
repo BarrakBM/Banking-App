@@ -53,7 +53,8 @@ class AccountServices (
         val newInfo = InformationDTO(
             name = account.name,
             balance = account.balance,
-            isActive = account.isActive
+            isActive = account.isActive,
+            gender = account.gender!!
         )
 
         return newInfo
