@@ -24,20 +24,20 @@ class AccountServices (
                 name = accountInfo.name,
                 balance = accountInfo.balance,
                 isActive = true,
-                gender = accountInfo.gender!!
+//                gender = accountInfo.gender!!
 
             )
 
 
         account.name = accountInfo.name // account name
         account.balance = accountInfo.balance // account new balance
-        account.gender = accountInfo.gender
+//        account.gender = accountInfo.gender
         accountRepository.save(account)
 
         val newInfo = accountInformationDTO(
             name = account.name,
             balance = account.balance ,
-            gender = account.gender
+//            gender = account.gender
 
         )
 
@@ -54,7 +54,7 @@ class AccountServices (
             name = account.name,
             balance = account.balance,
             isActive = account.isActive,
-            gender = account.gender!!
+//            gender = account.gender!!
         )
 
         return newInfo
@@ -164,15 +164,15 @@ class AccountServices (
     }
 
 
-    fun transferMoney(sourceAccountId: Long, destinationAccountId: Long, amount: BigDecimal): TransferResponseDTO {
+    fun transferMoney(sourceAccountId: Long, destinationAccountId: Long, amount: BigDecimal): TransferResponseDTO   {
 
-        val sourceAccount = accountRepository.findById(sourceAccountId)
-            .orElseThrow { IllegalArgumentException("Source account not found") }
+        val account = accountRepository.findByUserId(userId = sourceAccountId)!! //?: throw IllegalArgumentException("Account not found for userId: $userId")
 
-        val destinationAccount = accountRepository.findById(destinationAccountId)
-            .orElseThrow { IllegalArgumentException("Destination account not found") }
 
-        if (!sourceAccount.isActive || !destinationAccount.isActive) {
+        val destinationAccount = accountRepository.findByUserId(destinationAccountId)!!
+
+
+        if (!account.isActive || !destinationAccount.isActive) {
             throw IllegalStateException("One of the accounts is inactive")
         }
 
@@ -182,25 +182,25 @@ class AccountServices (
 
 
 
-        if (sourceAccount.balance < amount) {
-            throw IllegalStateException("Insufficient funds: balance is ${sourceAccount.balance}, tried to transfer $amount")
+        if (account.balance < amount) {
+            throw IllegalStateException("Insufficient funds: balance is ${account.balance}, tried to transfer $amount")
         }
 
-        if(sourceAccount == destinationAccount){
+        if(account == destinationAccount){
             throw IllegalArgumentException("You can't transfer to yourself")
         }
 
         // Perform balance transfer
-        sourceAccount.balance -= amount //deduct the amount from the source account
+        account.balance -= amount //deduct the amount from the source account
         destinationAccount.balance += amount //add the amount to the destination account
 
-        accountRepository.save(sourceAccount)
+        accountRepository.save(account)
         accountRepository.save(destinationAccount)
 
         // Save transaction record
         val new_transaction = userTransactionsRepository.save(
             UserTransactionsEntity(
-                sourceId = sourceAccount,
+                sourceId = account,
                 destinationId = destinationAccount,
                 amount = amount,
                 createdAt = LocalDate.now()
@@ -208,7 +208,7 @@ class AccountServices (
         )
         val transaction = TransferResponseDTO(
             userId = sourceAccountId,
-            newBalance = sourceAccount.balance
+            newBalance = account.balance
         )
         return transaction
     }
