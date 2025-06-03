@@ -37,7 +37,22 @@ class AccountController (
         val userId = request.getAttribute("userId") as Long
 //         accountServices.addOrUpdateInformation(userId, accountInfo)
 
-        return ResponseEntity.ok(accountServices.viewInformation(userId))
+        return try {
+            ResponseEntity.ok(accountServices.viewInformation(userId))
+        }
+        catch (e: Exception)
+        {
+            ResponseEntity.badRequest().body("No account ")
+        }
+    }
+
+
+    @GetMapping("/account/v1/allUsers")
+    fun getAllUsers(request: HttpServletRequest): ResponseEntity<*> {
+
+        val userId = request.getAttribute("userId") as Long
+        return ResponseEntity.ok(accountServices.allUsers(userId))
+
     }
 
 

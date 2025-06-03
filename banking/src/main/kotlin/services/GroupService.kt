@@ -50,6 +50,48 @@ class GroupService(
         )
     }
 
+    fun createGroupWithMembers(userId: Long, groupDto: GroupWithMembersDto): GroupResponseDTO {
+        val account = accountRepository.findByUserId(userId) ?: throw IllegalStateException("User doesn't have an account")
+        if (!account.isActive){
+            throw IllegalArgumentException("Account is not active")
+        }
+
+        // Create new group with current user as admin
+        val newGroup = GroupsEntity(
+            name = groupDto.name,
+            balance = groupDto.initialBalance,
+            isActive = true,
+            adminId = userId
+        )
+        val savedGroup = groupsRepository.save(newGroup)
+
+        // Add the group creator as admin
+        val creatorMember = GroupMembersEntity(
+            userId = userId,
+            groupId = savedGroup.groupId ?: throw IllegalArgumentException("Group ID cannot be null"),
+            isAdmin = true,
+            joinedAt = LocalDate.now()
+        )
+        groupMembersRepository.save(creatorMember)
+
+        // Add other selected members
+        groupDto.memberIds.forEach { memberId ->
+            val member = GroupMembersEntity(
+                userId = memberId,
+                groupId = savedGroup.groupId,
+                isAdmin = false,
+                joinedAt = LocalDate.now()
+            )
+            groupMembersRepository.save(member)
+        }
+
+        return GroupResponseDTO(
+            groupId = savedGroup.groupId,
+            name = savedGroup.name,
+            balance = savedGroup.balance
+        )
+    }
+
     // adding member to the group
     fun addGroupMember(adminId: Long, groupId: Long, userIdToAdd: Long): AddGroupMemberResposeDTO {
         // check if the group exists
