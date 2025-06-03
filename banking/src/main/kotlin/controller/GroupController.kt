@@ -53,6 +53,20 @@ class GroupController (
             }
         }
 
+        // create group
+        @PostMapping("/createWithMembers")
+        fun createGroupWithMembers(
+            request: HttpServletRequest,
+            @RequestBody groupDto: GroupWithMembersDto
+        ): ResponseEntity<*> {
+            try {
+                val userId = request.getAttribute("userId") as Long
+                return ResponseEntity.ok(groupService.createGroupWithMembers(userId, groupDto))
+            } catch (e: Exception) {
+                return ResponseEntity.badRequest().body(mapOf("error" to e.message))
+            }
+        }
+
         // adding member
         @PostMapping(("/addMember"))
         fun addMemberToGroup(

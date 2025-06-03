@@ -16,6 +16,15 @@ class AccountServices (
     val groupTransactionsRepository: GroupTransactionsRepository,
     val groupsRepository: GroupsRepository
 ){
+
+
+    fun allUsers(currentUserId: Long):List<userDTO>{
+
+        return accountRepository.findAll()
+            .filter { it.userId != currentUserId } // exclude current user
+            .map { userDTO(it.userId, it.name) }
+    }
+
     // DONE
     fun addOrUpdateInformation(userId: Long,accountInfo: accountInformationDTO): accountInformationDTO {
         val account = accountRepository.findByUserId(userId)
@@ -24,7 +33,7 @@ class AccountServices (
                 name = accountInfo.name,
                 balance = accountInfo.balance,
                 isActive = true,
-//                gender = accountInfo.gender!!
+                gender = accountInfo.gender!!
 
             )
 
@@ -37,7 +46,7 @@ class AccountServices (
         val newInfo = accountInformationDTO(
             name = account.name,
             balance = account.balance ,
-//            gender = account.gender
+            gender = account.gender
 
         )
 
@@ -54,7 +63,7 @@ class AccountServices (
             name = account.name,
             balance = account.balance,
             isActive = account.isActive,
-//            gender = account.gender!!
+            gender = account.gender!!
         )
 
         return newInfo

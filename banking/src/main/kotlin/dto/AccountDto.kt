@@ -12,6 +12,15 @@ data class accountInformationDTO(
     val gender: Int?
     )
 
+data class userDTO(
+    val userId: Long,
+    val name: String
+)
+
+data class userList(
+    val alluserList: List<userDTO>
+)
+
 data class InformationDTO(
 
     val name: String,
