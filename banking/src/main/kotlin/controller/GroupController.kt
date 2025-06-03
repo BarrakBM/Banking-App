@@ -26,6 +26,19 @@ class GroupController (
         val groupService: GroupService
     ) {
 
+        // get user's groups
+        @GetMapping("/userGroups")
+        fun getUserGroups(
+            request: HttpServletRequest
+        ): ResponseEntity<*> {
+            try {
+                val userId = request.getAttribute("userId") as Long
+                return ResponseEntity.ok(groupService.getUserGroups(userId))
+            } catch (e: Exception) {
+                return ResponseEntity.badRequest().body(mapOf("error" to e.message))
+            }
+        }
+
         // create group
         @PostMapping("/create")
         fun createGroup(

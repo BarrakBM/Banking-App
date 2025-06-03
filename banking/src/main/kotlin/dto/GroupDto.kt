@@ -14,7 +14,6 @@ data class GroupResponseDTO(
     val balance: BigDecimal
 )
 
-
 data class AddGroupMemberRequestDTO(
     val groupId: Long,
     val userIdToAdd: Long
@@ -34,7 +33,6 @@ data class GroupMemberResponseDTO(
     val joinedAt: LocalDate
 )
 
-// Add this to your GroupDto.kt file
 data class RemoveGroupMemberRequestDTO(
     val groupId: Long,
     val userIdToRemove: Long
@@ -43,45 +41,42 @@ data class RemoveGroupMemberRequestDTO(
 data class userRemoved(
     val groupId: Long,
     val RemovedUserId: Long
-
 )
 
 data class userRemovedResponseDTO(
     val groupName: String,
     val username: String
 )
-//--------------------------------
-
 
 data class FundGroupRequestDTO(
     val groupId: Long,
+)
 
-    )
 data class deActivateGroupRequestDTO(
     val groupId: Long,
+)
 
-    )
-
-
-//for group details info
+//for group details info - UPDATED WITH USER NAMES
 data class GroupDetailsDTO(
     val groupId: Long,
     val groupName: String,
     val balance: BigDecimal,
     val adminId: Long,
+    val adminName: String, // Added admin name
     val members: List<MemberDTO>
 )
 
 data class GroupDetailsResponseDTO(
-
     val groupName: String,
     val balance: BigDecimal,
     val adminName: String,
     val members: List<MemberInfoDTO>
 )
 
+// UPDATED WITH USER NAME
 data class MemberDTO(
     val userId: Long,
+    val userName: String, // Added user name
     val isAdmin: Boolean
 )
 
@@ -98,4 +93,3 @@ data class adminFundRequestDTO(
     val groupId: Long,
     val amount: BigDecimal
 )
-

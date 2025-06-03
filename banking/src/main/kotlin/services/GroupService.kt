@@ -15,6 +15,48 @@ class GroupService(
     private val fundRequestRepository: FundRequestRepository
 ) {
 
+    // Get all groups where user is a member
+    fun getUserGroups(userId: Long): List<GroupDetailsDTO> {
+        // Find all group memberships for this user
+        val userGroupMemberships = groupMembersRepository.findAll().filter { it.userId == userId }
+
+        return userGroupMemberships.mapNotNull { membership ->
+            try {
+                // Get the group details
+                val group = groupsRepository.findByGroupId(membership.groupId)
+                if (group != null && group.isActive) {
+                    // Get all members of this group
+                    val allMembers = groupMembersRepository.findByGroupId(membership.groupId)
+                    val memberDTOs = allMembers.map { member ->
+                        // Fetch user name for each member
+                        val memberAccount = accountRepository.findByUserId(member.userId)
+                        MemberDTO(
+                            userId = member.userId,
+                            userName = memberAccount?.name ?: "Unknown User",
+                            isAdmin = member.isAdmin
+                        )
+                    }
+
+                    // Get admin name
+                    val adminAccount = accountRepository.findByUserId(group.adminId)
+
+                    GroupDetailsDTO(
+                        groupId = group.groupId!!,
+                        groupName = group.name,
+                        balance = group.balance,
+                        adminId = group.adminId,
+                        adminName = adminAccount?.name ?: "Unknown Admin",
+                        members = memberDTOs
+                    )
+                } else {
+                    null // Skip inactive groups
+                }
+            } catch (e: Exception) {
+                null // Skip groups that can't be loaded
+            }
+        }
+    }
+
     // creating a group
     fun createGroup(userId: Long, groupDto: GroupDto): GroupResponseDTO {
         val account = accountRepository.findByUserId(userId) ?: throw IllegalStateException("User doesn't have an account")
@@ -71,9 +113,9 @@ class GroupService(
         val currentUser = accountRepository.findByUserId(userIdToAdd)
             ?: throw IllegalArgumentException("No account for this user")
 
-            if (!currentUser.isActive ){
-                throw IllegalArgumentException("User account is not active")
-            }
+        if (!currentUser.isActive ){
+            throw IllegalArgumentException("User account is not active")
+        }
 
 
         // check if user is already a member of the group
@@ -95,7 +137,7 @@ class GroupService(
             groupname = group.name,
             joinedAt = newMember.joinedAt
         )
-         groupMembersRepository.save(newMember)
+        groupMembersRepository.save(newMember)
 
         return response
 
@@ -235,17 +277,27 @@ class GroupService(
         //if the user is not a member we block access to the group details
         if (!isMember) { throw IllegalAccessException("Sorry, You are not a member of this group") }
 
-
-
         // Get all members of the group Here we fetch all group members and filter them by the current group ID
         val members = groupMembersRepository.findAll().filter { it.groupId == groupId }
-        val memberDTOs = members.map { MemberDTO(userId = it.userId, isAdmin = it.isAdmin) }
+        val memberDTOs = members.map { member ->
+            // Fetch user name for each member
+            val memberAccount = accountRepository.findByUserId(member.userId)
+            MemberDTO(
+                userId = member.userId,
+                userName = memberAccount?.name ?: "Unknown User",
+                isAdmin = member.isAdmin
+            )
+        }
+
+        // Get admin name
+        val adminAccount = accountRepository.findByUserId(group.adminId)
 
         return GroupDetailsDTO(
             groupId = group.groupId!!,
             groupName = group.name,
             balance = group.balance,
             adminId = group.adminId,
+            adminName = adminAccount?.name ?: "Unknown Admin",
             members = memberDTOs
         )
     }
